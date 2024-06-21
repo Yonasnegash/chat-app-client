@@ -1,38 +1,71 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
 }
 
-.App-link {
-  color: #61dafb;
+.chat-container {
+  width: 500px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll; /* Enable scrolling for long chats */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.chat-header {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.chat-history {
+  padding: 15px;
+  height: calc(100vh - 180px);
+}
+
+.message-from-user,
+.message-from-friend {
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  display: inline-block;
+  clear: both;
+}
+
+.message-from-user {
+  background-color: #ececec;
+  float: right;
+}
+
+.message-from-friend {
+  background-color: lightblue /* Light Blue in Chinese */;  /* Replace with your preferred color */
+  float: left;
+}
+
+.chat-input-section {
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  display: flex;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid hsl(0, 0%, 80%);
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.send-button {
+  padding: 10px 15px;
+  background-color: #4CAF50; /* Green color */
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 8px;
 }
