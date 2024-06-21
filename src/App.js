@@ -5,6 +5,7 @@ import "./App.css";
 function App() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [file, setFile] = useState(null);
   const ws = useRef(null);
 
   const connectWebSocket = useCallback(() => {
@@ -51,28 +52,39 @@ function App() {
   }, [connectWebSocket]);
 
   const sendMessage = () => {
-    if (inputValue.trim() === "") return;
+    if (inputValue.trim() === "" && !file) return;
 
-    const messageData = {
-      username: "User",
-      message: inputValue.trim(),
-    };
+    const formData = new FormData();
+    formData.append("username", "User"); // Replace with actual username
+    if (inputValue.trim() !== "") {
+      formData.append("message", inputValue);
+    }
+    if (file) {
+      formData.append("file", file);
+    }
 
     fetch("http://localhost:5000/send", {
       method: "POST",
-      body: JSON.stringify(messageData),
-      headers: { "Content-Type": "application/json" },
+      body: formData,
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Content sent:", data.newMessage);
+        console.log("Content uploaded:", data.chatMessage);
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+          ws.current.send(JSON.stringify(data.chatMessage));
+        }
       })
       .catch((error) => {
         console.error("Error sending content:", error);
       })
       .finally(() => {
         setInputValue("");
+        setFile(null);
       });
+  };
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
   };
 
   return (
@@ -89,6 +101,9 @@ function App() {
             }
           >
             {msg.message}
+            <a href={msg.fileLink} target="_blank" rel="noopener noreferrer">
+              {msg.fileLink}
+            </a>
           </div>
         ))}
       </div>
@@ -100,7 +115,7 @@ function App() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <input type="file" />
+        <input type="file" onChange={handleFileChange} />
         <button className="send-button" onClick={sendMessage}>
           Send
         </button>
